@@ -1,0 +1,17 @@
+@startuml
+title WarmHouse Component Diagram (UserService)
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+Container_Boundary(UserService, "Управление пользователями") {
+    Component(UserManagmentService, "Управление пользователями", "Java, Spring", "Управляет данными пользователей.")
+    ComponentDb(UserDatabase, "БД Пользователей", "PostgreSQL", "Хранение информации о пользователях.")
+}
+
+System_Ext(ApiGateway, "API Gateway", "Точка входа для запросов от веб-приложения.")
+
+' Взаимодействия
+Rel(ApiGateway, UserManagmentService, "Запросы на управление пользователями", "HTTP")
+Rel(UserManagmentService, UserDatabase, "Сохраняет данные пользователей", "JDBC")
+
+@enduml

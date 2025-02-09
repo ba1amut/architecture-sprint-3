@@ -1,0 +1,69 @@
+@startuml
+title WarmHouse Container Diagram
+top to bottom direction
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+Person(user, "Пользователь", "Пользователь, использующий систему Теплый Дом")
+System(WarmHouse, "Система тёплый дом")
+
+Container_Boundary(WarmHouse, "Система тёплый дом") {
+    Container(WebApp, "Веб приложение", "Java, Spring", )
+    Container(ApiGateway, "API Gateway")
+    ContainerQueue(MessageBroker, "Брокер сообщений", "Kafka кластер")
+
+Container_Boundary(SensorService, "Управление датчиками", "Java, Spring", "Получает данные с датчиков"){
+    Container(SensorGetDataService,"Получение данных от датчиков")
+    Container(SensorSaveDataService, "Сохранение и предоставление информации о датчиках и их данных")
+    ContainerDb(SensorDatabase,"БД Датчиков","PostgreSQL","Хранение информации о датчиках и данных")
+}
+
+Container_Boundary(ScenarioService, "Управление сценариями"){
+    Container(ScenarioExecutorService,"Выполнение сценариев")
+    Container(ScenarioManagmentService, "Просмотр/создание/редактирование/удаление сценариев")
+    ContainerDb(ScenarioDatabase,"БД Сценариев", "PostgreSQL","Хранение информации о сценариях")
+}
+
+Container_Boundary(UserService, "Управление пользователями"){
+    Container(UserManagmentService,"Управление пользователями")
+    ContainerDb(UserDatabase,"БД Пользователей", "PostgreSQL","Хранение информации о пользователях")
+}
+
+Container_Boundary(DeviceService, "Управление устроствами"){
+    Container(DeviceStatusService,"Просмотр/Добавление/Удаление устройств")
+    Container(DeviceTaskExecutorService,"Выполнение сценариев и контроль статуса на устройствах")
+    ContainerDb(DeviceDatabase, "БД Устройств", "PostgreSQL", "Хранение информации об устройствах")
+}
+}
+
+System_Ext(SmartDevice, "Устройства управления", "API устройств")
+System_Ext(Sensors, "Датчики", "API датчиков")
+
+Rel_D(user, WebApp, "Использует систему")
+Rel_D(WebApp, ApiGateway,)
+
+
+Rel_D(ApiGateway,SensorSaveDataService,)
+Rel_D(ApiGateway,ScenarioManagmentService,)
+Rel_D(ApiGateway,UserManagmentService,)
+Rel_D(ApiGateway,DeviceStatusService,)
+
+Rel(SensorSaveDataService,SensorDatabase,"Сохраняет в базу информацию о датчиках и их значениях")
+Rel(SensorGetDataService,MessageBroker,"Публикует данные от датчиков")
+Rel(MessageBroker,SensorSaveDataService,"Получает данные о датчиках и их значениях")
+Rel(SensorGetDataService,Sensors,"Запрашивает и получает информацию")
+
+Rel(ScenarioManagmentService,ScenarioDatabase,"Сохраняет сценарии пользователей")
+Rel(ScenarioDatabase,ScenarioExecutorService,"Получает информацию о сценариях пользователей")
+Rel(ScenarioExecutorService,MessageBroker,"Передает информацию о запуске сценариев")
+
+Rel(MessageBroker,DeviceTaskExecutorService,"Направляет сценарии для передачи на устройство")
+Rel_L(DeviceTaskExecutorService,SmartDevice,"Выполнение сценария на устройстве")
+Rel(SmartDevice,DeviceTaskExecutorService,"Получение статуса устройства")
+Rel(DeviceTaskExecutorService,MessageBroker,"Публикация состояния устроства")
+Rel(DeviceStatusService,DeviceDatabase,"Сохранение информации об устроствах")
+Rel(MessageBroker,DeviceStatusService,"Получение данных о состоянии устройства")
+
+Rel(UserManagmentService,UserDatabase,"Хранение данных о пользователях")
+
+@enduml

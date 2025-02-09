@@ -1,0 +1,62 @@
+@startuml
+title ER-диаграмма: Логическая модель базы данных
+
+entity User {
+    *user_id : INTEGER (PK)
+    --
+    username : VARCHAR(50)
+    password_hash : VARCHAR(255)
+    email : VARCHAR(100)
+    created_at : TIMESTAMP
+}
+
+entity Device {
+    *device_id : INTEGER (PK)
+    --
+    serial_number : VARCHAR(50) (UQ)
+    name : VARCHAR(100)
+    type : VARCHAR(50)
+    status : VARCHAR(50)
+    user_id : INTEGER (FK)
+}
+
+entity Sensor {
+    *sensor_id : INTEGER (PK)
+    --
+    serial_number : VARCHAR(50) (UQ)
+    name : VARCHAR(100)
+    type : VARCHAR(50)
+    location : VARCHAR(100)
+    user_id : INTEGER (FK)
+}
+
+entity Scenario {
+    *scenario_id : INTEGER (PK)
+    --
+    name : VARCHAR(100)
+    description : TEXT
+    user_id : INTEGER (FK)
+}
+
+entity SensorData {
+    *data_id : INTEGER (PK)
+    --
+    sensor_id : INTEGER (FK)
+    value : DOUBLE PRECISION
+    timestamp : TIMESTAMP
+}
+
+entity ScenarioDevice {
+    *scenario_id : INTEGER (FK)
+    *device_id : INTEGER (FK)
+}
+
+' Взаимосвязи
+User ||--o{ Device : "1 пользователь имеет N устройств"
+User ||--o{ Sensor : "1 пользователь имеет N датчиков"
+User ||--o{ Scenario : "1 пользователь имеет N сценариев"
+Sensor ||--o{ SensorData : "1 датчик имеет N записей данных"
+Scenario ||--o{ ScenarioDevice : "1 сценарий управляет N устройствами"
+Device ||--o{ ScenarioDevice : "1 устройство может быть в N сценариях"
+
+@enduml

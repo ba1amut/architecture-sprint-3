@@ -1,0 +1,48 @@
+@startuml
+title Диаграмма на уровне кода: Управление датчиками (SensorService)
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+' Классы для SensorGetDataService
+class SensorGetDataService {
+    +getDataFromSensors(): SensorData
+    +publishDataToBroker(data: SensorData): void
+}
+
+' Классы для SensorSaveDataService
+class SensorSaveDataService {
+    +saveDataToDatabase(data: SensorData): void
+    +handleApiGatewayRequest(request: ApiRequest): void
+}
+
+' Классы для SensorDatabase
+class SensorDatabase {
+    +save(data: SensorData): void
+    +retrieve(): SensorData
+}
+
+' Вспомогательные классы
+class SensorData {
+    -sensorId: String
+    -value: Double
+    -timestamp: DateTime
+    +getSensorId(): String
+    +getValue(): Double
+    +getTimestamp(): DateTime
+}
+
+class ApiRequest {
+    -requestType: String
+    -parameters: Map<String, String>
+    +getRequestType(): String
+    +getParameters(): Map<String, String>
+}
+
+' Взаимодействия
+SensorGetDataService --> SensorData : Использует
+SensorGetDataService --> MessageBroker : Публикует данные
+SensorSaveDataService --> SensorDatabase : Сохраняет данные
+SensorSaveDataService --> ApiRequest : Обрабатывает запросы
+SensorDatabase --> SensorData : Хранит данные
+
+@enduml

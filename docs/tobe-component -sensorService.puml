@@ -1,0 +1,24 @@
+@startuml
+title WarmHouse Component Diagram (SensorService)
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+Container_Boundary(SensorService, "Управление датчиками") {
+    Component(SensorGetDataService, "Получение данных от датчиков", "Java, Spring", "Получает данные от внешних датчиков через API.")
+    Component(SensorSaveDataService, "Сохранение и предоставление информации о датчиках и их данных", "Java, Spring", "Сохраняет данные о датчиках и их значениях в базу данных.")
+    ComponentDb(SensorDatabase, "БД Датчиков", "PostgreSQL", "Хранение информации о датчиках и их данных.")
+}
+
+System_Ext(Sensors, "Датчики", "API датчиков", "Внешние датчики, предоставляющие данные.")
+System_Ext(MessageBroker, "Брокер сообщений", "Kafka кластер", "Обеспечивает асинхронное взаимодействие между сервисами.")
+System_Ext(ApiGateway, "API Gateway", "Точка входа для запросов от веб-приложения.")
+
+' Взаимодействия
+Rel(Sensors, SensorGetDataService, "Передает данные", "API")
+Rel(SensorGetDataService, MessageBroker, "Публикует данные", "Kafka")
+Rel(MessageBroker, SensorSaveDataService, "Передает данные для сохранения", "Kafka")
+Rel(SensorSaveDataService, SensorDatabase, "Сохраняет данные", "JDBC")
+Rel(SensorDatabase, SensorSaveDataService, "Предоставляет данные", "JDBC")
+Rel(SensorSaveDataService, ApiGateway, "Предоставляет данные", "HTTP")
+
+@enduml

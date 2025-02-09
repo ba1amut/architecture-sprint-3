@@ -1,0 +1,15 @@
+@startuml
+title WarmHouse Context Diagram
+top to bottom direction
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Component.puml
+
+Person(user, "Пользователь", "Пользователь, использующий систему Теплый Дом")
+System(WarmHouse, "Система Теплый Дом","Система управления отоплением и мониторинга температуры")
+
+System_Ext(SmartDevice, "Устройства управления отоплением", "API устройств")
+System_Ext(Sensors, "Датчики температуры", "API датчиков")
+
+Rel(user, WarmHouse, "Использует систему")
+Rel(WarmHouse,Sensors,"Запрашивает и получает информацию о температуре")
+Rel(WarmHouse,SmartDevice,"Управляет отоплением")
+@enduml

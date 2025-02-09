@@ -1,0 +1,21 @@
+@startuml
+title WarmHouse Component Diagram (ScenarioService)
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+Container_Boundary(ScenarioService, "Управление сценариями") {
+    Component(ScenarioManagmentService, "Просмотр/создание/редактирование/удаление сценариев", "Java, Spring", "Управляет сценариями пользователей.")
+    Component(ScenarioExecutorService, "Выполнение сценариев", "Java, Spring", "Выполняет сценарии, передавая команды через брокер сообщений.")
+    ComponentDb(ScenarioDatabase, "БД Сценариев", "PostgreSQL", "Хранение информации о сценариях.")
+}
+
+System_Ext(MessageBroker, "Брокер сообщений", "Kafka кластер", "Обеспечивает асинхронное взаимодействие между сервисами.")
+System_Ext(ApiGateway, "API Gateway", "Точка входа для запросов от веб-приложения.")
+
+' Взаимодействия
+Rel(ApiGateway, ScenarioManagmentService, "Запросы на управление сценариями", "HTTP")
+Rel(ScenarioManagmentService, ScenarioDatabase, "Сохраняет сценарии", "JDBC")
+Rel(ScenarioDatabase, ScenarioExecutorService, "Предоставляет сценарии для выполнения", "JDBC")
+Rel(ScenarioExecutorService, MessageBroker, "Передает команды для выполнения сценариев", "Kafka")
+
+@enduml

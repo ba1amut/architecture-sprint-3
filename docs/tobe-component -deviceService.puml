@@ -1,0 +1,25 @@
+@startuml
+title WarmHouse Component Diagram (DeviceService)
+
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+Container_Boundary(DeviceService, "Управление устройствами") {
+    Component(DeviceStatusService, "Просмотр/Добавление/Удаление устройств", "Java, Spring", "Управляет информацией об устройствах.")
+    Component(DeviceTaskExecutorService, "Выполнение сценариев и контроль статуса на устройствах", "Java, Spring", "Выполняет сценарии и контролирует статус устройств.")
+    ComponentDb(DeviceDatabase, "БД Устройств", "PostgreSQL", "Хранение информации об устройствах.")
+}
+
+System_Ext(MessageBroker, "Брокер сообщений", "Kafka кластер", "Обеспечивает асинхронное взаимодействие между сервисами.")
+System_Ext(ApiGateway, "API Gateway", "Точка входа для запросов от веб-приложения.")
+System_Ext(SmartDevice, "Устройства управления", "API устройств", "Внешние устройства, выполняющие команды.")
+
+' Взаимодействия
+Rel(ApiGateway, DeviceStatusService, "Запросы на управление устройствами", "HTTP")
+Rel(DeviceStatusService, DeviceDatabase, "Сохраняет информацию об устройствах", "JDBC")
+Rel(DeviceTaskExecutorService, DeviceDatabase, "Получает информацию об устройствах", "JDBC")
+Rel(DeviceTaskExecutorService, MessageBroker, "Получает команды и публикует статус", "Kafka")
+Rel(MessageBroker, DeviceTaskExecutorService, "Передает команды для выполнения", "Kafka")
+Rel(DeviceTaskExecutorService, SmartDevice, "Управление устройствами", "API")
+Rel(SmartDevice, DeviceTaskExecutorService, "Получение статуса устройства", "API")
+
+@enduml
