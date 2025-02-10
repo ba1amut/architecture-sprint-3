@@ -45,13 +45,27 @@
 
 
 **Диаграмма компонентов (Components)**
+*UserService*
+![tobe-component -userService](https://github.com/user-attachments/assets/f8a110fe-d01a-42c5-9c12-a0ec756a0738)
 
-Добавьте диаграмму для каждого из выделенных микросервисов.
+*SensorService*
+![tobe-component -sensorService](https://github.com/user-attachments/assets/f24d9066-07ab-4647-9d2a-d9df41ff97ef)
+
+*ScenarioService*
+![tobe-component -scenarioService](https://github.com/user-attachments/assets/88052044-f1e8-45b0-90a5-b42fa64ef80e)
+
+*DeviceService*
+![tobe-component -deviceService](https://github.com/user-attachments/assets/db29912d-ec75-4b42-b7aa-d3d7c140074b)
+
+
 
 **Диаграмма кода (Code)**
+SensorServiceCode
 
-Добавьте одну диаграмму или несколько.
+![tobe-code-sensorService](https://github.com/user-attachments/assets/04037370-d896-4176-b00c-fb259df9c438)
+
 
 # Задание 3. Разработка ER-диаграммы
 
-Добавьте сюда ER-диаграмму. Она должна отражать ключевые сущности системы, их атрибуты и тип связей между ними.
+![er](https://github.com/user-attachments/assets/2cc55b67-0675-4d45-8f80-e5f7d5f746d2)
+
