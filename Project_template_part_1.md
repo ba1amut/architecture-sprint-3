@@ -65,7 +65,8 @@
 
 
 **Диаграмма кода (Code)**
-SensorServiceCode
+
+*SensorServiceCode*
 
 ![tobe-code-sensorService](https://github.com/user-attachments/assets/04037370-d896-4176-b00c-fb259df9c438)
 
