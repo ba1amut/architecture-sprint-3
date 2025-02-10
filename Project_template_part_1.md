@@ -33,7 +33,9 @@
 
 ### 5. Визуализация контекста системы — диаграмма С4
 
-[C4 Context].(https://github.com/ba1amut/architecture-sprint-3/blob/sprint3/docs/png/Context.png)
+[Посетите Яндекс](https://ya.ru/)
+
+[C4 Context](https://github.com/ba1amut/architecture-sprint-3/blob/sprint3/docs/png/Context.png)
 
 # Задание 2. Проектирование микросервисной архитектуры
 
